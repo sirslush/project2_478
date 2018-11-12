@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		063C094921978417000EF9D9 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 063C094821978417000EF9D9 /* main.cpp */; };
+		068B92892199192C0095D660 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068B92872199192C0095D660 /* main.cpp */; };
+		068B928A2199192C0095D660 /* ASClassification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 068B92882199192C0095D660 /* ASClassification.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +25,10 @@
 
 /* Begin PBXFileReference section */
 		063C094521978417000EF9D9 /* project2_478 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = project2_478; sourceTree = BUILT_PRODUCTS_DIR; };
-		063C094821978417000EF9D9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		068B92852199192C0095D660 /* ASClassification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASClassification.h; sourceTree = "<group>"; };
+		068B92862199192C0095D660 /* 20150801.as2types.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 20150801.as2types.txt; sourceTree = "<group>"; };
+		068B92872199192C0095D660 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		068B92882199192C0095D660 /* ASClassification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ASClassification.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +61,21 @@
 		063C094721978417000EF9D9 /* project2_478 */ = {
 			isa = PBXGroup;
 			children = (
-				063C094821978417000EF9D9 /* main.cpp */,
+				068B92842199192C0095D660 /* src */,
 			);
-			path = project2_478;
+			name = project2_478;
+			path = /Users/alecfoster/Desktop/Notes/478/project2_478/project2_478;
+			sourceTree = "<absolute>";
+		};
+		068B92842199192C0095D660 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				068B92852199192C0095D660 /* ASClassification.h */,
+				068B92862199192C0095D660 /* 20150801.as2types.txt */,
+				068B92872199192C0095D660 /* main.cpp */,
+				068B92882199192C0095D660 /* ASClassification.cpp */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,7 +134,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				063C094921978417000EF9D9 /* main.cpp in Sources */,
+				068B928A2199192C0095D660 /* ASClassification.cpp in Sources */,
+				068B92892199192C0095D660 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,7 +145,7 @@
 		063C094A21978417000EF9D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -187,7 +204,7 @@
 		063C094B21978417000EF9D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

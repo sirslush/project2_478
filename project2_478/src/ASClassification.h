@@ -16,14 +16,19 @@ using namespace std;
 class ASClass {
 private:
 	int as;
-	string source;
-	string type;
+	vector<ASClass> peers;
+	vector<ASClass> customers;
+	int degree;
 
 public:
 
 	ASClass();	//default constructor
-	ASClass(int as, string source, string type); //constructor
-	void classification(ifstream &input); //reads the input file
+	ASClass(int as);	//constructor
+	void classification(ifstream &input);	//reads the input file
+	void links(ifstream &input);	//reads the second input file
+	void addPeers(int as1, int as2);	//adds the link between two peers
+	void addCustomers(int as1, int as2);	//adds the link between a customer and provider
+	void degrees(); // calculates the degree if all AS
 };
 
 

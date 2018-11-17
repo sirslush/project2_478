@@ -1,6 +1,8 @@
 #include "ASClassification.h"
 
 vector<ASClass> ASes;
+vector<ASClass> ASesTest;
+
 
 ASClass::ASClass() {} //default constructor
 
@@ -104,7 +106,8 @@ void ASClass::addCustomers(int as1, int as2) {
 	ASClass AS2 = ASClass(as2);
 	int loc1 = -1;
 	int loc2 = -1;
-
+    
+    int location1 = binarySearch(0, int(ASes.size()), as1);
 	for (unsigned int i = 0; i < ASes.size(); i++) {
 		if (ASes[i].as == AS1.as) {
 			loc1 = i;
@@ -135,9 +138,11 @@ void ASClass::addCustomers(int as1, int as2) {
 
 void ASClass::links(ifstream &input) {
 	string splitter = "|";
-
+    int num = 0;
 	for (string inLine; getline(input, inLine); ) {
+       
 		string line = inLine;
+        cout << num << "\n";
 		if ((line.find("#") != string::npos) || (line == "")) {
 			//if a pound symbol is the line, ignore as it is a comment 
 			//if line is empty then ignore
@@ -171,14 +176,32 @@ void ASClass::links(ifstream &input) {
 			else {
 				cout << "error: no link" << endl;
 			}
+            
 		}
-
+        num++;
 	}
 
 	cout << "done" << endl;
 	cin.get();
 	cout << "helllo";
 }
+
+int ASClass::binarySearch(int min, int max, int targetAs){
+    if (max>=min) {
+        int mid =min+(max-min)/2;
+        if (ASes.at(mid).getas() == targetAs) {
+            return mid;
+        }
+        if (ASes.at(mid).getas()>targetAs) {
+            return binarySearch(min, mid-1, targetAs);
+        }
+        return binarySearch(mid+1, max, targetAs);
+    }
+    cout << "Error in search";
+    return -1;
+}
+
+
 
 void ASClass::degrees() {
 

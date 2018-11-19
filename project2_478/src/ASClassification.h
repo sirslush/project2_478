@@ -18,7 +18,7 @@ private:
 	int as;
 	vector<ASClass> peers;
 	vector<ASClass> customers;
-	int degree;
+	int degree = 0;
 
 public:
     int getas(){return as;}
@@ -32,7 +32,8 @@ public:
     int binarySearch(int min, int max, int targetAs);
     int getPeersDegree(){return int(peers.size());}
     int getCustomersDegree(){return int(customers.size());}
-    int insertAses(ASClass *newAses);
+    int findSpottoInsert(ASClass *newAses);
+    void insertASes();
     
 };
 

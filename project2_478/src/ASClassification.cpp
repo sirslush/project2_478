@@ -96,7 +96,8 @@ void ASClass::addPeers(int as1, int as2) {
 	else { //AS1 and AS2 are not in the ASes vector 
 			AS1.peers.push_back(AS2);
 			AS2.peers.push_back(AS1);
-			ASes.push_back(AS1);
+        
+        ASes.push_back(AS1);
 			ASes.push_back(AS2);
 	}
 }
@@ -104,12 +105,20 @@ void ASClass::addPeers(int as1, int as2) {
 void ASClass::addCustomers(int as1, int as2) {
 	ASClass AS1 = ASClass(as1);
 	ASClass AS2 = ASClass(as2);
-	int loc1 = -1;
-	int loc2 = -1;
+    int loc1 = -1;
+    int loc2 = -1;
     
-    int location1 = binarySearch(0, int(ASes.size()), as1);
-    int location2 = binarySearch(0, int(ASes.size()), as2);
+//    int loc1 = AS1.insertAses(&AS1); // inserting AS1
+//    vector<ASClass>::iterator it = ASes.begin();
+//    ASes.insert(it+loc1, AS1);
+
+//    int loc2 = AS2.insertAses(&AS2);  // inserting AS2
+//    vector<ASClass>::iterator it2 = ASes.begin();
+//    ASes.insert(it2+loc2, AS2);
     
+//    int location1 = binarySearch(0, int(ASes.size()), as1);
+//    int location2 = binarySearch(0, int(ASes.size()), as2);
+//
     
 	for (unsigned int i = 0; i < ASes.size(); i++) {
 		if (ASes[i].as == AS1.as) {
@@ -124,17 +133,20 @@ void ASClass::addCustomers(int as1, int as2) {
 		ASes[loc1].customers.push_back(ASes[loc2]); // add AS2 customer to AS1 provider
 	}
 	else if ((loc1 >= 0) && !(loc2 >= 0)) { //AS1 is already in vector & AS2 is not
-		ASes.push_back(AS2); // add the new AS2 to the vector of ASes
+        ASes.push_back(AS2); // add the new AS2 to the vector of ASes
 		ASes[loc1].customers.push_back(AS2); //add the new AS2 to the peers of AS1
 	}
 	else if (!(loc1 >= 0) && (loc2 >= 0)) { //AS1 is not in vector and AS2 is 
 		AS1.customers.push_back(ASes[loc2]); // add AS2 to AS1 customers
 		ASes.push_back(AS1); // add the new AS1 to the vector of ASes
+        
 	}
 
 	else { //AS1 and AS2 are not in the ASes vector 
 		AS1.customers.push_back(AS2);
+        
 		ASes.push_back(AS1);
+        
 		ASes.push_back(AS2);
 	}
 }
@@ -203,9 +215,9 @@ int ASClass::binarySearch(int min, int max, int targetAs){
     return -1;
 }
 
-int ASClass::insertAses(ASClass *newASes){
-    for (unsigned int i = 0; i < ASes.size(); i++) {
-        if (ASes[i].as > newASes->as) {
+int ASClass::findSpottoInsert(ASClass *newASes){
+    for (unsigned int i = 0; i < ASesTest.size(); i++) {
+        if (ASesTest[i].as > newASes->as) {
             return i;
         }
     }
@@ -216,3 +228,10 @@ int ASClass::insertAses(ASClass *newASes){
 void ASClass::degrees(ASClass *ASes){
     ASes->degree = ASes->getPeersDegree()+ASes->getCustomersDegree();
 }
+
+void ASClass::insertASes(){
+        int loc1 = this->findSpottoInsert(this); // inserting AS1
+        vector<ASClass>::iterator it = ASes.begin();
+        ASes.insert(it+loc1, *this);
+}
+

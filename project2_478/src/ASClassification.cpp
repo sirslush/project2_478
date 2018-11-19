@@ -108,6 +108,9 @@ void ASClass::addCustomers(int as1, int as2) {
 	int loc2 = -1;
     
     int location1 = binarySearch(0, int(ASes.size()), as1);
+    int location2 = binarySearch(0, int(ASes.size()), as2);
+    
+    
 	for (unsigned int i = 0; i < ASes.size(); i++) {
 		if (ASes[i].as == AS1.as) {
 			loc1 = i;
@@ -197,12 +200,19 @@ int ASClass::binarySearch(int min, int max, int targetAs){
         }
         return binarySearch(mid+1, max, targetAs);
     }
-    cout << "Error in search";
     return -1;
 }
 
+int ASClass::insertAses(ASClass *newASes){
+    for (unsigned int i = 0; i < ASes.size(); i++) {
+        if (ASes[i].as > newASes->as) {
+            return i;
+        }
+    }
+    return int(ASes.size());
+}
+    
 
-
-void ASClass::degrees() {
-
+void ASClass::degrees(ASClass *ASes){
+    ASes->degree = ASes->getPeersDegree()+ASes->getCustomersDegree();
 }

@@ -28,8 +28,12 @@ public:
 	void links(ifstream &input);	//reads the second input file
 	void addPeers(int as1, int as2);	//adds the link between two peers
 	void addCustomers(int as1, int as2);	//adds the link between a customer and provider
-	void degrees(); // calculates the degree if all AS
+	void degrees(ASClass *ASes); // calculates the degree if all AS
     int binarySearch(int min, int max, int targetAs);
+    int getPeersDegree(){return int(peers.size());}
+    int getCustomersDegree(){return int(customers.size());}
+    int insertAses(ASClass *newAses);
+    
 };
 
 

@@ -1,7 +1,7 @@
 #include "ASClassification.h"
 
 vector<ASClass> ASes;
-vector<ASClass> ASesTest;
+list<ASClass> ASesTest;
 
 
 ASClass::ASClass() {} //default constructor
@@ -10,6 +10,61 @@ ASClass::ASClass(int as) { //constructor
 	this->as = as;
 }
 
+void printclassification(){
+    int enterprise = 0, content = 0, transit = 0;
+    
+    for (unsigned int i = 0; i < ASes.size(); i++) {
+        if (ASes.at(i).getdegree() > 2 && ASes.at(i).getCustomersDegree()==0) {
+            enterprise++;
+        }
+        else if (ASes.at(i).getdegree() < 2 && ASes.at(i).getCustomersDegree()==0 && ASes.at(i).getPeersDegree() !=0 ){
+            content++;
+        }
+        else if (ASes.at(i).getCustomersDegree()>0){
+            transit++;
+        }
+    }
+    cout << "Total ASes that are enterprise = " << enterprise << "\n";
+    cout << "Total ASes that are content = " << content << "\n";
+    cout << "Total ASes that are transit = " << transit << "\n";
+    
+}
+
+
+void printDegree(){
+    int tot1 = 0, tot2_5 = 0, tot5_100 = 0, tot100_200 = 0, tot200_1000 = 0, tot_1000 = 0;
+    for (unsigned int i = 0; i < ASes.size(); i++) {
+        if (ASes.at(i).getdegree() == 1) {
+            tot1++;
+        }
+        else if (ASes.at(i).getdegree() >= 2 && ASes.at(i).getdegree() < 5) {
+            tot2_5++;
+        }
+        else if (ASes.at(i).getdegree() >= 5 && ASes.at(i).getdegree() < 100) {
+            tot5_100++;
+        }
+        else if (ASes.at(i).getdegree() >= 100 && ASes.at(i).getdegree() < 200) {
+            tot100_200++;
+        }
+        else if (ASes.at(i).getdegree() >= 200 && ASes.at(i).getdegree() < 1000) {
+            tot200_1000++;
+        }
+        else if (ASes.at(i).getdegree() >= 1000) {
+            tot_1000++;
+        }
+    }
+    
+    cout << "Total ASes with 1 degree = " << tot1 << "\n";
+    cout << "Total ASes with 2-5 degree = " << tot2_5 << "\n";
+    cout << "Total ASes with 5-100 degree = " << tot5_100 << "\n";
+    cout << "Total ASes with 100-200 degree = " << tot100_200 << "\n";
+    cout << "Total ASes with 200-1000 degree = " << tot200_1000 << "\n";
+    cout << "Total ASes with 1000+ degree = " << tot_1000 << "\n\n\n";
+
+    
+}
+
+
 void ASClass::classification(ifstream &input){ //reads the input file
 	int linesCount = 0;
 	double totalCount = 0;
@@ -17,6 +72,7 @@ void ASClass::classification(ifstream &input){ //reads the input file
 	double contentCount = 0;
 	double enterpriseCount = 0;
 	string splitter = "|";
+    
 
 	for (string inLine; getline(input, inLine); linesCount++) {
 		string line = inLine;
@@ -66,6 +122,10 @@ void ASClass::addPeers(int as1, int as2) {
 	ASClass AS2 = ASClass(as2);
 	int loc1 = -1;
 	int loc2 = -1;
+
+    
+    
+//    ASesTest.sort([](const ASClass& a, const ASClass & b) { return a.as < b.as; });
     
     if (!ASes.empty()) {
         loc1 = binarySearch(0, ASes.size()-1, AS1.as);
@@ -174,7 +234,6 @@ void ASClass::links(ifstream &input) {
 	for (string inLine; getline(input, inLine); ) {
        
 		string line = inLine;
-        cout << num << "\n";
 		if ((line.find("#") != string::npos) || (line == "")) {
 			//if a pound symbol is the line, ignore as it is a comment 
 			//if line is empty then ignore
@@ -210,11 +269,15 @@ void ASClass::links(ifstream &input) {
 			}
             
 		}
-        
 	}
 
+    for (int i = 0; i < ASes.size(); i++) {
+        ASes.at(i).degrees();
+    }
+    printDegree();
+    printclassification();
 	cout << "done" << endl;
-	cin.get();
+	//cin.get();
 	cout << "helllo";
 }
 
@@ -242,8 +305,8 @@ int ASClass::findSpottoInsert(ASClass *newASes){
 }
     
 
-void ASClass::degrees(ASClass *ASes){
-    ASes->degree = ASes->getPeersDegree()+ASes->getCustomersDegree();
+void ASClass::degrees(){
+    this->degree = this->getPeersDegree()+this->getCustomersDegree();
 }
 
 void ASClass::insertASes(){
@@ -251,4 +314,7 @@ void ASClass::insertASes(){
         vector<ASClass>::iterator it = ASes.begin();
         ASes.insert(it+loc1, *this);
 }
+
+
+
 

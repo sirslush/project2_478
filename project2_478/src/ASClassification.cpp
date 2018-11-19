@@ -66,15 +66,20 @@ void ASClass::addPeers(int as1, int as2) {
 	ASClass AS2 = ASClass(as2);
 	int loc1 = -1;
 	int loc2 = -1;
+    
+    if (!ASes.empty()) {
+        loc1 = binarySearch(0, ASes.size()-1, AS1.as);
+        loc2 = binarySearch(0, ASes.size()-1, AS2.as);
+    }
 	
-	for (unsigned int i = 0; i < ASes.size(); i++) {
-		if (ASes[i].as == AS1.as) {
-			loc1 = i;
-		}
-		if (ASes[i].as == AS2.as) {
-			loc2 = i;
-		}
-	}
+//    for (unsigned int i = 0; i < ASes.size(); i++) {
+//        if (ASes[i].as == AS1.as) {
+//            loc1 = i;
+//        }
+//        if (ASes[i].as == AS2.as) {
+//            loc2 = i;
+//        }
+//    }
 
 	if ((loc1 >= 0) && (loc2 >= 0)) {//AS1 is already in vector & AS2 is already in vector
 		/*ASClass temp1 = ASClass();
@@ -86,19 +91,24 @@ void ASClass::addPeers(int as1, int as2) {
 			ASes[loc2].peers.push_back(ASes[loc1]);	//add the first AS to the seconf AS peer
 	}
 	else if ((loc1 >= 0) && !(loc2 >= 0)) { //AS1 is already in vector & AS2 is not
-				ASes.push_back(AS2); // add the new AS2 to the vector of ASes
+                AS2.insertASes();
+                //ASes.push_back(AS2); // add the new AS2 to the vector of ASes
 				ASes[loc1].peers.push_back(AS2); //add the new AS2 to the peers of AS1
 	}
 	else if (!(loc1 >= 0) && (loc2 >= 0)) { //AS1 is not in vector and AS2 is 
-			ASes.push_back(AS1);
+            AS1.insertASes();
+            //ASes.push_back(AS1);
 			ASes[loc2].peers.push_back(AS1);
 	}
 	else { //AS1 and AS2 are not in the ASes vector 
 			AS1.peers.push_back(AS2);
 			AS2.peers.push_back(AS1);
         
-        ASes.push_back(AS1);
-			ASes.push_back(AS2);
+            AS1.insertASes();
+            AS2.insertASes();
+        
+//            ASes.push_back(AS1);
+//            ASes.push_back(AS2);
 	}
 }
 
@@ -119,35 +129,42 @@ void ASClass::addCustomers(int as1, int as2) {
 //    int location1 = binarySearch(0, int(ASes.size()), as1);
 //    int location2 = binarySearch(0, int(ASes.size()), as2);
 //
+    if (!ASes.empty()) {
+        loc1 = binarySearch(0, ASes.size()-1, AS1.as);
+        loc2 = binarySearch(0, ASes.size()-1, AS2.as);
+    }
     
-	for (unsigned int i = 0; i < ASes.size(); i++) {
-		if (ASes[i].as == AS1.as) {
-			loc1 = i;
-		}
-		if (ASes[i].as == AS2.as) {
-			loc2 = i;
-		}
-	}
+//    for (unsigned int i = 0; i < ASes.size(); i++) {
+//        if (ASes[i].as == AS1.as) {
+//            loc1 = i;
+//        }
+//        if (ASes[i].as == AS2.as) {
+//            loc2 = i;
+//        }
+//    }
 
 	if ((loc1 >= 0) && (loc2 >= 0)) {//AS1 is already in vector & AS2 is already in vector
 		ASes[loc1].customers.push_back(ASes[loc2]); // add AS2 customer to AS1 provider
 	}
 	else if ((loc1 >= 0) && !(loc2 >= 0)) { //AS1 is already in vector & AS2 is not
-        ASes.push_back(AS2); // add the new AS2 to the vector of ASes
+        AS2.insertASes();
+        //ASes.push_back(AS2); // add the new AS2 to the vector of ASes
 		ASes[loc1].customers.push_back(AS2); //add the new AS2 to the peers of AS1
 	}
 	else if (!(loc1 >= 0) && (loc2 >= 0)) { //AS1 is not in vector and AS2 is 
 		AS1.customers.push_back(ASes[loc2]); // add AS2 to AS1 customers
-		ASes.push_back(AS1); // add the new AS1 to the vector of ASes
+        AS1.insertASes();
+        //ASes.push_back(AS1); // add the new AS1 to the vector of ASes
         
 	}
 
 	else { //AS1 and AS2 are not in the ASes vector 
 		AS1.customers.push_back(AS2);
         
-		ASes.push_back(AS1);
-        
-		ASes.push_back(AS2);
+        AS1.insertASes();
+        AS2.insertASes();
+//        ASes.push_back(AS1);
+//        ASes.push_back(AS2);
 	}
 }
 
@@ -193,7 +210,7 @@ void ASClass::links(ifstream &input) {
 			}
             
 		}
-        num++;
+        
 	}
 
 	cout << "done" << endl;
@@ -216,8 +233,8 @@ int ASClass::binarySearch(int min, int max, int targetAs){
 }
 
 int ASClass::findSpottoInsert(ASClass *newASes){
-    for (unsigned int i = 0; i < ASesTest.size(); i++) {
-        if (ASesTest[i].as > newASes->as) {
+    for (unsigned int i = 0; i < ASes.size(); i++) {
+        if (ASes[i].as > newASes->as) {
             return i;
         }
     }

@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <math.h>
 #include <iomanip>
+#include <vector>
 
 using namespace std;
 

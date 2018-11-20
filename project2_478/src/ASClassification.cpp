@@ -1,8 +1,7 @@
 #include "ASClassification.h"
 
 vector<ASClass> ASes;
-list<ASClass> ASesTest;
-
+list<ASEC> ASesEC;
 
 ASClass::ASClass() {} //default constructor
 
@@ -10,7 +9,7 @@ ASClass::ASClass(int as) { //constructor
 	this->as = as;
 }
 
-void printclassification(){
+void printclassificationForGraph4(){
     int enterprise = 0, content = 0, transit = 0;
     
     for (unsigned int i = 0; i < ASes.size(); i++) {
@@ -60,9 +59,13 @@ void printDegree(){
     cout << "Total ASes with 100-200 degree = " << tot100_200 << "\n";
     cout << "Total ASes with 200-1000 degree = " << tot200_1000 << "\n";
     cout << "Total ASes with 1000+ degree = " << tot_1000 << "\n\n\n";
+}
 
+void printConeResults(){
+    
     
 }
+
 
 
 void ASClass::classification(ifstream &input){ //reads the input file
@@ -229,6 +232,22 @@ void ASClass::addCustomers(int as1, int as2) {
 }
 
 void ASClass::links(ifstream &input) {
+    ifstream inputFile3;
+    inputFile3.open("/Users/alecfoster/Desktop/Notes/478/project2_478/project2_478/src/routeviews-rv2-20181117-1200.txt");
+    if (inputFile3.is_open()) {
+        cout << "2.4 Topology Inference Through AS links Extra Credit" << endl;
+        Extracredit(inputFile3);
+        
+        inputFile3.close();
+    }
+    else {
+        cout << "Could not open file: routeviews-rv2-20181117-1200.txt" << endl;
+        cout << "Please make sure the file is in the same folder as InternetTopology.exe and try again" << endl;
+    }
+    
+    ////////////////////////////////////////////
+    
+    
 	string splitter = "|";
     int num = 0;
 	for (string inLine; getline(input, inLine); ) {
@@ -267,7 +286,7 @@ void ASClass::links(ifstream &input) {
 			else {
 				cout << "error: no link" << endl;
 			}
-            
+            num++;
 		}
 	}
 
@@ -275,7 +294,12 @@ void ASClass::links(ifstream &input) {
         ASes.at(i).degrees();
     }
     printDegree();
-    printclassification();
+    printclassificationForGraph4();
+    countNumberPrefixes();
+    CalcIPSpace();
+    sortASesbyASesableToReach();
+    
+    
 	cout << "done" << endl;
 	//cin.get();
 	cout << "helllo";
@@ -314,6 +338,124 @@ void ASClass::insertASes(){
         vector<ASClass>::iterator it = ASes.begin();
         ASes.insert(it+loc1, *this);
 }
+
+ASEC::ASEC() {} //default constructor
+
+ASEC::ASEC(int as, int prefixln, string prefix){ //constructor
+    this->as.push_back(as);
+    this->prefix= prefix;
+    this->prefixlength = prefixln;
+}
+ASEC::ASEC(int prefixln, string prefix){ //constructor
+    this->prefix= prefix;
+    this->prefixlength = prefixln;
+}
+
+void Extracredit(ifstream &input){
+    int num = 0;
+    for (string inLine; getline(input, inLine); ) {
+
+        string splitter = "\t";
+        string line = inLine;
+        
+        size_t pos0 = line.find(splitter);
+        string IPprefix = line.substr(0, pos0);
+        line.erase(0, pos0 + splitter.length());
+        
+        //Second AS
+        size_t pos1 = line.find(splitter);
+        string prefixLength = line.substr(0, pos1);
+        line.erase(0, pos1 + splitter.length());
+        
+        //Check link type
+        size_t pos2 = line.find(splitter);
+        string AS = line.substr(0, pos2);
+        line.erase(0, pos2 + splitter.length());
+        if (line.find("_") != string::npos){
+            ASEC ASnode(stoi(prefixLength), IPprefix);
+            while (line.find("_") != string::npos) {
+                string splitter2 = "_";
+                size_t pos3 = line.find(splitter2);
+                string line2 = line.substr(0, pos3);
+                if (line2.length()>6) {
+                    break;
+                }
+                ASnode.addAS(stoi(line2));
+                line.erase(line.begin(), line.begin()+pos3+1);
+            }
+            if (line.length()>6) {
+        
+            }
+            else{
+                ASnode.addAS(stoi(line));
+                ASesEC.push_back(ASnode);
+            }
+            
+        }
+        else{
+            if (AS.length()<6) {
+                ASEC ASnode(stoi(AS), stoi(prefixLength), IPprefix);
+                ASesEC.push_back(ASnode);
+
+            }
+        }
+    }
+    
+    
+}
+
+int binarySearch(int min, int max, int targetAs){
+    if (max>=min) {
+        int mid =min+(max-min)/2;
+        if (ASes.at(mid).getas() == targetAs) {
+            return mid;
+        }
+        if (ASes.at(mid).getas()>targetAs) {
+            return binarySearch(min, mid-1, targetAs);
+        }
+        return binarySearch(mid+1, max, targetAs);
+    }
+    return -1;
+}
+
+void countNumberPrefixes(){
+    list<ASEC>::iterator it;
+    for (it = ASesEC.begin(); it != ASesEC.end(); it++){
+        vector<int> temp =it->getASes();
+        for (int i = 0; i < temp.size(); i++) {
+            int as = temp.at(i);
+            int loc = binarySearch(0, int(ASes.size()), as);
+            if (loc == -1) {
+                
+            }
+            else{
+                ASes.at(loc).increaseNumPre();
+                ASes.at(loc).addToPrefixVector(it->getPreLength());
+            }
+        }
+    }
+
+}
+
+void CalcIPSpace(){
+    vector<ASClass>::iterator it;
+    for (it = ASes.begin(); it != ASes.end(); it++){
+        vector<int> temp =it->getPreFixVect();
+        for (int i = 0; i < temp.size(); i++) {
+            it->addtoIPSpace(temp.at(i));
+    }
+    
+}
+}
+
+void sortASesbyASesableToReach(){
+    //sort(ASes.begin(), ASes.end());
+}
+
+
+
+
+
 
 
 

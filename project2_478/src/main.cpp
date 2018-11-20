@@ -26,22 +26,23 @@ int main(int argc, char* argv[]) {
 
 	////////////////////////////////////////////////////////
 
-	//2.2 Topology Inference Through AS links
-	ifstream inputFile2;
-	inputFile2.open("20170901.as-rel2.txt");
+//    2.2 Topology Inference Through AS links
+    ifstream inputFile2;
+    inputFile2.open("20170901.as-rel2.txt");
 
-	if (inputFile2.is_open()) {
-		cout << "2.2 Topology Inference Through AS links" << endl;
-		ASClass AS = ASClass();
-		AS.links(inputFile2);
+    if (inputFile2.is_open()) {
+        cout << "2.2 Topology Inference Through AS links" << endl;
+        ASClass AS = ASClass();
+        AS.links(inputFile2);
 
-		inputFile2.close();
-	}
-	else {
-		cout << "Could not open file: 20170901.as-rel2.txt" << endl;
-		cout << "Please make sure the file is in the same folder as InternetTopology.exe and try again" << endl;
-		return EXIT_FAILURE;
-	}
+        inputFile2.close();
+    }
+    else {
+        cout << "Could not open file: 20170901.as-rel2.txt" << endl;
+        cout << "Please make sure the file is in the same folder as InternetTopology.exe and try again" << endl;
+        return EXIT_FAILURE;
+    }
+    
 
 	cout << "Press enter to continue" << endl;
 	cin.get();
